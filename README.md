@@ -2,7 +2,7 @@
 
 Agent de reinforcement learning (PPO) entraine sur LunarLander-v3, avec diagnostic et correction d'un comportement de "reward hacking" via reward shaping.
 
-**Demo en ligne :** https://rl-lunarlander-reward-shaping-xxxxx.streamlit.app
+**Demo en ligne :** [https://rl-lunarlander-reward-shaping-xxxxx.streamlit.app](https://rl-lunarlander-reward-shaping-hrjfduynqmxbjxkf5ebkqw.streamlit.app/)
 
 ## Le probleme
 
