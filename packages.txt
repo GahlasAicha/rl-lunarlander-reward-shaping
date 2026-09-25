@@ -1,2 +1,2 @@
-﻿swig
+swig
 build-essential
