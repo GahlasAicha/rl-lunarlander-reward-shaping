@@ -1,60 +1,60 @@
 # RL LunarLander - Reward Shaping
 
-Agent de reinforcement learning (PPO) entraine sur LunarLander-v3, avec diagnostic et correction d'un comportement de "reward hacking" via reward shaping.
+Reinforcement learning agent (PPO) trained on LunarLander-v3, with diagnosis and correction of a reward hacking behavior through reward shaping.
 
-**[Voir la demo en ligne](https://rl-lunarlander-reward-shaping-hrjfduynqmxbjxkf5ebkqw.streamlit.app/)**
+**[View live demo](https://rl-lunarlander-reward-shaping-hrjfduynqmxbjxkf5ebkqw.streamlit.app/)**
 
-## Le probleme
+## The Problem
 
-Un premier agent PPO entraine sur 200 000 pas de temps atteint un score final proche de 0, bien en dessous du seuil de "resolution" du jeu (+200). L'observation cle : la duree moyenne des episodes augmente au fil de l'entrainement (jusqu'a ~680 pas) sans que le score progresse en consequence.
+A first PPO agent trained for 200,000 timesteps converges to a final score near 0, far below the environment's "solved" threshold (+200). Key observation: average episode length kept increasing throughout training (up to ~680 steps) without a matching increase in reward.
 
-**Diagnostic :** l'agent a appris a exploiter une faille du systeme de recompense. Se crasher coute -100, mais rester indefiniment en vol stationnaire ne coute presque rien. L'agent a donc appris a "flotter" plutot qu'a atterrir, un comportement classique de reward hacking en RL.
+**Diagnosis:** the agent learned to exploit a flaw in the reward structure. Crashing costs -100, but hovering indefinitely costs almost nothing. The agent therefore learned to "hover" instead of landing, a classic reward hacking pattern in RL.
 
-## La correction : reward shaping
+## The Fix: Reward Shaping
 
-Ajout d'une penalite de -0.3 par pas de temps via un wrapper Gymnasium, pour forcer l'agent a atterrir rapidement plutot que de temporiser.
+Added a -0.3 penalty per timestep through a Gymnasium wrapper, forcing the agent to land quickly rather than stall in the air.
 
-## Resultats
+## Results
 
-Evaluation sur 50 episodes, en mode deterministe, score brut du jeu (penalite retiree pour comparaison equitable) :
+Evaluated over 50 episodes in deterministic mode, using the raw game score (penalty removed for a fair comparison):
 
-| Metrique | Baseline | Avec reward shaping |
+| Metric | Baseline | With reward shaping |
 |---|---|---|
-| Recompense moyenne | 73.9 | 183.7 |
-| Atterrissages reussis | 4 pourcent (2/50) | 72 pourcent (36/50) |
-| Crashs | 0 pourcent | 0 pourcent |
+| Mean reward | 73.9 | 183.7 |
+| Successful landings | 4% (2/50) | 72% (36/50) |
+| Crashes | 0% | 0% |
 
-Le taux de reussite est multiplie par 18, sans augmentation du taux de crash. Le gain vient du fait que l'agent se decide a atterrir, pas d'une prise de risque accrue.
+Success rate improved 18x, with no increase in crash rate. The gain comes from the agent actually committing to land, not from riskier behavior.
 
-![Courbe de comparaison](comparison_curve_fixed.png)
+![Comparison curve](comparison_curve_fixed.png)
 
-## Structure du projet
+## Project Structure
 
-- train.py : entrainement PPO baseline
-- train_shaped.py : entrainement PPO avec reward shaping
-- train_logged.py : version avec logging pour la courbe de comparaison
-- compare.py : evaluation chiffree des deux modeles
-- plot_comparaison.py : generation de la courbe d'apprentissage
-- record_video.py : enregistrement des videos avant et apres
-- app.py : dashboard Streamlit
+- train.py: baseline PPO training
+- train_shaped.py: PPO training with reward shaping
+- train_logged.py: logged version for the comparison curve
+- compare.py: quantitative evaluation of both models
+- plot_comparaison.py: generates the learning curve
+- record_video.py: records before/after videos
+- app.py: Streamlit dashboard
 
-## Stack technique
+## Tech Stack
 
-- Gymnasium : environnement de simulation (LunarLander-v3)
-- Stable-Baselines3 : implementation de l'algorithme PPO
-- PyTorch : moteur de calcul sous-jacent
-- Streamlit : dashboard interactif de demonstration
+- Gymnasium: simulation environment (LunarLander-v3)
+- Stable-Baselines3: PPO implementation
+- PyTorch: underlying compute engine
+- Streamlit: interactive demo dashboard
 
-## Reproduire le projet
+## Reproducing the Project
 
-Installer les dependances avec pip install -r requirements.txt
+Install dependencies with pip install -r requirements.txt
 
-Puis dans l'ordre :
-- python train_logged.py pour entrainer les 2 modeles avec logging
-- python compare.py pour evaluer et comparer les 2 modeles
-- python plot_comparaison.py pour generer la courbe de comparaison
-- streamlit run app.py pour lancer le dashboard en local
+Then, in order:
+- python train_logged.py to train both models with logging
+- python compare.py to evaluate and compare both models
+- python plot_comparaison.py to generate the comparison curve
+- streamlit run app.py to launch the dashboard locally
 
-## Auteur
+## Author
 
 GahlasAicha
